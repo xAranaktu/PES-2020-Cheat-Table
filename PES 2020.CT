@@ -9,7 +9,7 @@
       <CheatEntries>
         <CheatEntry>
           <ID>641</ID>
-          <Description>"CT VER: 20.1.0"</Description>
+          <Description>"CT VER: 20.1.1"</Description>
           <LastState Value="" RealAddress="00000000"/>
           <GroupHeader>1</GroupHeader>
         </CheatEntry>
@@ -28,6 +28,121 @@
       <LastState Value="" RealAddress="00000000"/>
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
+        <CheatEntry>
+          <ID>652</ID>
+          <Description>"Edit Club Budget"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PES2020.exe
+  Version:
+  Date   : 2019-11-12
+  Author : Aranaktu
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(INJECT_ClubBudget,PES2020.exe,8B 87 F4 E4 6F 01 89 45 C4) // should be unique
+alloc(newmem,$1000,"PES2020.exe"+E947D8)
+
+alloc(ptrBudget, 8)
+registersymbol(ptrBudget)
+ptrBudget:
+dq 00
+
+label(code)
+label(return)
+
+newmem:
+  mov [ptrBudget], rdi
+code:
+  mov eax,[rdi+016FE4F4]
+  jmp return
+
+INJECT_ClubBudget:
+  jmp newmem
+  nop
+return:
+registersymbol(INJECT_ClubBudget)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT_ClubBudget:
+  db 8B 87 F4 E4 6F 01
+
+unregistersymbol(INJECT_ClubBudget)
+dealloc(newmem)
+unregistersymbol(ptrBudget)
+dealloc(ptrBudget)
+
+{
+// ORIGINAL CODE - INJECT_ClubBudgetION POINT: "PES2020.exe"+E947D8
+
+"PES2020.exe"+E947AD: 48 8B D8              -  mov rbx,rax
+"PES2020.exe"+E947B0: E8 2B CE FB FF        -  call PES2020.exe+E515E0
+"PES2020.exe"+E947B5: 48 8B C8              -  mov rcx,rax
+"PES2020.exe"+E947B8: 48 8B D3              -  mov rdx,rbx
+"PES2020.exe"+E947BB: E8 30 E0 FB FF        -  call PES2020.exe+E527F0
+"PES2020.exe"+E947C0: E8 1B CE FB FF        -  call PES2020.exe+E515E0
+"PES2020.exe"+E947C5: 48 8B C8              -  mov rcx,rax
+"PES2020.exe"+E947C8: BA 02 00 00 00        -  mov edx,00000002
+"PES2020.exe"+E947CD: 41 B8 86 02 19 00     -  mov r8d,00190286
+"PES2020.exe"+E947D3: E8 48 F2 FB FF        -  call PES2020.exe+E53A20
+// ---------- INJECT_ClubBudgetING HERE ----------
+"PES2020.exe"+E947D8: 8B 87 F4 E4 6F 01     -  mov eax,[rdi+016FE4F4]
+// ---------- DONE INJECT_ClubBudgetING  ----------
+"PES2020.exe"+E947DE: 89 45 C4              -  mov [rbp-3C],eax
+"PES2020.exe"+E947E1: 48 8D 55 C4           -  lea rdx,[rbp-3C]
+"PES2020.exe"+E947E5: 48 8D 4D D0           -  lea rcx,[rbp-30]
+"PES2020.exe"+E947E9: E8 A2 79 68 00        -  call PES2020.exe+151C190
+"PES2020.exe"+E947EE: 48 8B D8              -  mov rbx,rax
+"PES2020.exe"+E947F1: E8 EA CD FB FF        -  call PES2020.exe+E515E0
+"PES2020.exe"+E947F6: 48 8B C8              -  mov rcx,rax
+"PES2020.exe"+E947F9: 4C 8B C3              -  mov r8,rbx
+"PES2020.exe"+E947FC: BA 02 00 00 00        -  mov edx,00000002
+"PES2020.exe"+E94801: E8 4A 06 FC FF        -  call PES2020.exe+E54E50
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>656</ID>
+              <Description>"Better Don't change :)"</Description>
+              <LastState Value="" RealAddress="00000000"/>
+              <GroupHeader>1</GroupHeader>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>653</ID>
+                  <Description>"start"</Description>
+                  <ShowAsHex>1</ShowAsHex>
+                  <VariableType>8 Bytes</VariableType>
+                  <Address>ptrBudget</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>654</ID>
+              <Description>"Transfer Budget"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ptrBudget</Address>
+              <Offsets>
+                <Offset>16FE4F4</Offset>
+              </Offsets>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>655</ID>
+              <Description>"Salary Budget"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>4 Bytes</VariableType>
+              <Address>ptrBudget</Address>
+              <Offsets>
+                <Offset>16FE508</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
         <CheatEntry>
           <ID>7</ID>
           <Description>"Edit Player"</Description>
@@ -504,8 +619,8 @@ dealloc(ptrPlayer)
                 <CheatEntry>
                   <ID>131</ID>
                   <Description>"Stronger Foot"</Description>
-                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Right Leg
-1:Left Leg
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Right
+1:Left
 </DropDownList>
                   <VariableType>Binary</VariableType>
                   <BitStart>7</BitStart>
@@ -2115,10 +2230,49 @@ dealloc(ptrPlayer)
                 <CheatEntry>
                   <ID>538</ID>
                   <Description>"Stamina Bar"</Description>
-                  <VariableType>Byte</VariableType>
+                  <ShowAsSigned>1</ShowAsSigned>
+                  <VariableType>Binary</VariableType>
+                  <BitStart>0</BitStart>
+                  <BitLength>7</BitLength>
+                  <ShowAsBinary>0</ShowAsBinary>
                   <Address>ptrPlayer</Address>
                   <Offsets>
                     <Offset>146</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>646</ID>
+                  <Description>"Blinking Form Arrow"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:No
+1:Yes
+</DropDownList>
+                  <ShowAsSigned>1</ShowAsSigned>
+                  <VariableType>Binary</VariableType>
+                  <BitStart>7</BitStart>
+                  <BitLength>1</BitLength>
+                  <ShowAsBinary>0</ShowAsBinary>
+                  <Address>ptrPlayer</Address>
+                  <Offsets>
+                    <Offset>146</Offset>
+                  </Offsets>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>645</ID>
+                  <Description>"Form Arrow"</Description>
+                  <DropDownList ReadOnly="1" DescriptionOnly="1" DisplayValueAsItem="1">0:Terrible Form
+1:Poor Form
+2:Normal Form
+3:Good Form
+4:Top Form
+</DropDownList>
+                  <ShowAsSigned>1</ShowAsSigned>
+                  <VariableType>Binary</VariableType>
+                  <BitStart>0</BitStart>
+                  <BitLength>3</BitLength>
+                  <ShowAsBinary>0</ShowAsBinary>
+                  <Address>ptrPlayer</Address>
+                  <Offsets>
+                    <Offset>147</Offset>
                   </Offsets>
                 </CheatEntry>
                 <CheatEntry>
