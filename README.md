@@ -24,7 +24,7 @@
  3. Edit values in Cheat Engine
 
 ## Features
-
+ - Edit Focus Points in BAL Mode
  - Edit Club Budget
    -  Transfer Budget
    -  Salary Budget
@@ -36,6 +36,8 @@
     - Team Role
     - Contract
     - And other misc stuff
-
+ - Gameplay:
+    - Match Time
+    - Unlimited Stamina
 # Discord
 https://discord.gg/rtMGhan
