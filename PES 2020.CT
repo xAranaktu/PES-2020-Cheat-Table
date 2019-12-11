@@ -9,7 +9,7 @@
       <CheatEntries>
         <CheatEntry>
           <ID>641</ID>
-          <Description>"CT VER: 20.1.1"</Description>
+          <Description>"CT VER: 20.1.2"</Description>
           <LastState Value="" RealAddress="00000000"/>
           <GroupHeader>1</GroupHeader>
         </CheatEntry>
@@ -152,7 +152,7 @@ dealloc(ptrBudget)
           <AssemblerScript>{ Game   : PES2020.exe
   Version:
   Date   : 2019-11-06
-  Author : Pawel
+  Author : Aranaktu
 
   This script does blah blah blah
 }
@@ -165,7 +165,7 @@ dealloc(ptrBudget)
 aobscanmodule(INJECT_ptrPlayer,PES2020.exe,CB B8 02 00 00 00 0F 1F 40 00 66 0F 1F 84 00 00 00 00 00 0F 10 02 0F 11 01) // should be unique
 alloc(newmem,$1000,"PES2020.exe"+C650F0)
 
-alloc(ptrPlayer, 8)
+alloc(ptrPlayer, 8, "PES2020.exe"+C650F0)
 registersymbol(ptrPlayer)
 ptrPlayer:
 dq 00
@@ -189,6 +189,26 @@ INJECT_ptrPlayer+13:
 return:
 registersymbol(INJECT_ptrPlayer)
 
+aobscanmodule(INJECT_ptrPlayerTwo,PES2020.exe,48 8B 40 2C 48 89 02) // should be unique
+alloc(newmem_ptrPlayerTwo,$1000,"PES2020.exe"+730FFA7)
+
+label(code_ptrPlayerTwo)
+label(ret_ptrPlayerTwo)
+
+newmem_ptrPlayerTwo:
+  mov [ptrPlayer], rax
+
+code_ptrPlayerTwo:
+  mov rax,[rax+2C]
+  mov [rdx],rax
+  jmp ret_ptrPlayerTwo
+
+INJECT_ptrPlayerTwo:
+  jmp newmem_ptrPlayerTwo
+  nop 2
+ret_ptrPlayerTwo:
+registersymbol(INJECT_ptrPlayerTwo)
+
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
 INJECT_ptrPlayer+13:
@@ -196,6 +216,13 @@ INJECT_ptrPlayer+13:
 
 unregistersymbol(INJECT_ptrPlayer)
 dealloc(newmem)
+
+//code_ptrPlayerTwo from here till the end of the code_ptrPlayerTwo will be used to disable the cheat
+INJECT_ptrPlayerTwo:
+  db 48 8B 40 2C 48 89 02
+
+unregistersymbol(INJECT_ptrPlayerTwo)
+dealloc(newmem_ptrPlayerTwo)
 
 unregistersymbol(ptrPlayer)
 dealloc(ptrPlayer)
@@ -227,6 +254,36 @@ dealloc(ptrPlayer)
 "PES2020.exe"+C65112: 0F 11 41 40                 -  movups [rcx+40],xmm0
 "PES2020.exe"+C65116: 0F 10 4A 50                 -  movups xmm1,[rdx+50]
 "PES2020.exe"+C6511A: 0F 11 49 50                 -  movups [rcx+50],xmm1
+}
+
+
+{
+// ORIGINAL code_ptrPlayerTwo - INJECT_ptrPlayerTwoION POINT: "PES2020.exe"+730FFA7
+
+"PES2020.exe"+730FF86: FF E7                 -  jmp rdi
+"PES2020.exe"+730FF88: C6                    -  db -3A
+"PES2020.exe"+730FF89: 0F 1F 80 00 00 00 00  -  nop [rax+00000000]
+"PES2020.exe"+730FF90: 48 8B 41 08           -  mov rax,[rcx+08]
+"PES2020.exe"+730FF94: 48 85 C0              -  test rax,rax
+"PES2020.exe"+730FF97: 75 0E                 -  jne PES2020.exe+730FFA7
+"PES2020.exe"+730FF99: 48 8B 05 40 FE 17 FC  -  mov rax,[PES2020.exe+348FDE0]
+"PES2020.exe"+730FFA0: 48 89 02              -  mov [rdx],rax
+"PES2020.exe"+730FFA3: 48 89 D0              -  mov rax,rdx
+"PES2020.exe"+730FFA6: C3                    -  ret
+// ---------- INJECT_ptrPlayerTwoING HERE ----------
+"PES2020.exe"+730FFA7: 48 8B 40 2C           -  mov rax,[rax+2C]
+"PES2020.exe"+730FFAB: 48 89 02              -  mov [rdx],rax
+// ---------- DONE INJECT_ptrPlayerTwoING  ----------
+"PES2020.exe"+730FFAE: 48 89 D0              -  mov rax,rdx
+"PES2020.exe"+730FFB1: C3                    -  ret
+"PES2020.exe"+730FFB2: 4C 8B 1C 24           -  mov r11,[rsp]
+"PES2020.exe"+730FFB6: 4D 89 DD              -  mov r13,r11
+"PES2020.exe"+730FFB9: 48 8D 64 24 08        -  lea rsp,[rsp+08]
+"PES2020.exe"+730FFBE: 4C 8B 04 24           -  mov r8,[rsp]
+"PES2020.exe"+730FFC2: 48 83 EC F8           -  sub rsp,-08
+"PES2020.exe"+730FFC6: E9 45 F8 5D 0E        -  jmp PES2020.exe+158EF810
+"PES2020.exe"+730FFCB: 48 31 D2              -  xor rdx,rdx
+"PES2020.exe"+730FFCE: 56                    -  push rsi
 }
 </AssemblerScript>
           <CheatEntries>
@@ -2389,6 +2446,355 @@ dealloc(ptrPlayer)
                   </CheatEntries>
                 </CheatEntry>
               </CheatEntries>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>669</ID>
+          <Description>"Training"</Description>
+          <Options moHideChildren="1"/>
+          <LastState/>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>{ Game   : PES2020.exe
+  Version:
+  Date   : 2019-12-10
+  Author : Aranaktu
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+aobscanmodule(INJECT_TrainingOnEnter,PES2020.exe,49 8B 86 90 00 00 00 0F BE) // should be unique
+alloc(newmem,$1000,"PES2020.exe"+C0FC5B1)
+
+alloc(ptrFocusPoints, 8, "PES2020.exe"+C0FC5B1)
+registersymbol(ptrFocusPoints)
+ptrFocusPoints:
+dq 00
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  mov rax,[r14+00000090]
+  mov [ptrFocusPoints], rax
+  jmp return
+
+INJECT_TrainingOnEnter:
+  jmp newmem
+  nop 2
+return:
+registersymbol(INJECT_TrainingOnEnter)
+
+aobscanmodule(INJECT_TrainingOnChange,PES2020.exe,0F BE 41 0A 29 D0) // should be unique
+alloc(newmem_onchange,$1000,"PES2020.exe"+C0FB881)
+
+label(code_onchange)
+label(ret_onchange)
+
+newmem_onchange:
+  mov [ptrFocusPoints], rcx
+
+code_onchange:
+  movsx eax,byte ptr [rcx+0A]
+  sub eax,edx
+  jmp ret_onchange
+
+INJECT_TrainingOnChange:
+  jmp newmem_onchange
+  nop
+ret_onchange:
+registersymbol(INJECT_TrainingOnChange)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT_TrainingOnEnter:
+  db 49 8B 86 90 00 00 00
+
+unregistersymbol(INJECT_TrainingOnEnter)
+dealloc(newmem)
+
+INJECT_TrainingOnChange:
+  db 0F BE 41 0A 29 D0
+
+unregistersymbol(INJECT_TrainingOnChange)
+dealloc(newmem_onchange)
+
+{
+// ORIGINAL CODE - INJECT_TrainingOnEnterION POINT: "PES2020.exe"+C0FC5B1
+
+"PES2020.exe"+C0FC582: FF 90 50 02 00 00     -  call qword ptr [rax+00000250]
+"PES2020.exe"+C0FC588: 49 8B 06              -  mov rax,[r14]
+"PES2020.exe"+C0FC58B: BA 02 00 00 00        -  mov edx,00000002
+"PES2020.exe"+C0FC590: 4C 89 F1              -  mov rcx,r14
+"PES2020.exe"+C0FC593: FF 90 50 02 00 00     -  call qword ptr [rax+00000250]
+"PES2020.exe"+C0FC599: E8 D2 72 D5 F4        -  call PES2020.exe+E53870
+"PES2020.exe"+C0FC59E: 48 89 C1              -  mov rcx,rax
+"PES2020.exe"+C0FC5A1: BA 01 00 00 00        -  mov edx,00000001
+"PES2020.exe"+C0FC5A6: 41 B8 20 00 81 02     -  mov r8d,02810020
+"PES2020.exe"+C0FC5AC: E8 FF 96 D5 F4        -  call PES2020.exe+E55CB0
+// ---------- INJECT_TrainingOnEnterING HERE ----------
+"PES2020.exe"+C0FC5B1: 49 8B 86 90 00 00 00  -  mov rax,[r14+00000090]
+// ---------- DONE INJECT_TrainingOnEnterING  ----------
+"PES2020.exe"+C0FC5B8: 0F BE 58 0A           -  movsx ebx,byte ptr [rax+0A]
+"PES2020.exe"+C0FC5BC: E8 AF 72 D5 F4        -  call PES2020.exe+E53870
+"PES2020.exe"+C0FC5C1: 48 89 C1              -  mov rcx,rax
+"PES2020.exe"+C0FC5C4: 41 89 D8              -  mov r8d,ebx
+"PES2020.exe"+C0FC5C7: BA 01 00 00 00        -  mov edx,00000001
+"PES2020.exe"+C0FC5CC: E8 1F AC D5 F4        -  call PES2020.exe+E571F0
+"PES2020.exe"+C0FC5D1: 4C 89 F1              -  mov rcx,r14
+"PES2020.exe"+C0FC5D4: E8 57 89 D3 F4        -  call PES2020.exe+E34F30
+"PES2020.exe"+C0FC5D9: 48 8B 6C 24 38        -  mov rbp,[rsp+38]
+"PES2020.exe"+C0FC5DE: 48 8B 5C 24 30        -  mov rbx,[rsp+30]
+}
+
+{
+// ORIGINAL code_onchange - INJECTION POINT: "PES2020.exe"+C0FB881
+
+"PES2020.exe"+C0FB85D: 74 78                 -  je PES2020.exe+C0FB8D7
+"PES2020.exe"+C0FB85F: 44 00 FE              -  add sil,r15l
+"PES2020.exe"+C0FB862: 45 31 C0              -  xor r8d,r8d
+"PES2020.exe"+C0FB865: 40 0F BE D6           -  movsx edx,sil
+"PES2020.exe"+C0FB869: 48 89 C1              -  mov rcx,rax
+"PES2020.exe"+C0FB86C: E8 5F FC D4 F4        -  call PES2020.exe+E4B4D0
+"PES2020.exe"+C0FB871: 48 8B 8F 90 00 00 00  -  mov rcx,[rdi+00000090]
+"PES2020.exe"+C0FB878: 41 0F BE D6           -  movsx edx,r14l
+"PES2020.exe"+C0FB87C: 83 FB 0A              -  cmp ebx,0A
+"PES2020.exe"+C0FB87F: 7D 14                 -  jnl PES2020.exe+C0FB895
+// ---------- INJECTING HERE ----------
+"PES2020.exe"+C0FB881: 0F BE 41 0A           -  movsx eax,byte ptr [rcx+0A]
+"PES2020.exe"+C0FB885: 29 D0                 -  sub eax,edx
+// ---------- DONE INJECTING  ----------
+"PES2020.exe"+C0FB887: 83 F8 15              -  cmp eax,15
+"PES2020.exe"+C0FB88A: 77 09                 -  ja PES2020.exe+C0FB895
+"PES2020.exe"+C0FB88C: 48 63 C3              -  movsxd  rax,ebx
+"PES2020.exe"+C0FB88F: 00 14 08              -  add [rax+rcx],dl
+"PES2020.exe"+C0FB892: 28 51 0A              -  sub [rcx+0A],dl
+"PES2020.exe"+C0FB895: 48 8B 87 90 00 00 00  -  mov rax,[rdi+00000090]
+"PES2020.exe"+C0FB89C: 0F BE 58 0A           -  movsx ebx,byte ptr [rax+0A]
+"PES2020.exe"+C0FB8A0: E8 CB 7F D5 F4        -  call PES2020.exe+E53870
+"PES2020.exe"+C0FB8A5: 48 89 C1              -  mov rcx,rax
+"PES2020.exe"+C0FB8A8: 41 89 D8              -  mov r8d,ebx
+}
+</AssemblerScript>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>670</ID>
+              <Description>"Focus Points"</Description>
+              <VariableType>Byte</VariableType>
+              <Address>ptrFocusPoints</Address>
+              <Offsets>
+                <Offset>A</Offset>
+              </Offsets>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>657</ID>
+          <Description>"Gameplay"</Description>
+          <Options moHideChildren="1"/>
+          <LastState Value="" RealAddress="00000000"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>0</ID>
+              <Description>"Match Time"</Description>
+              <Options moHideChildren="1"/>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{ Game   : PES2020.exe
+  Version:
+  Date   : 2019-12-09
+  Author : Aranaktu
+}
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+
+
+aobscanmodule(INJECT_MatchTime,PES2020.exe,8B 44 24 40 89 44 24 40) // should be unique
+alloc(newmem,$1000,"PES2020.exe"+7ABD593)
+
+alloc(MatchTime, 4, "PES2020.exe"+7ABD593)
+registersymbol(MatchTime)
+MatchTime:
+dd 00
+
+
+label(code)
+label(return)
+
+newmem:
+  mov eax, [MatchTime]
+  cmp eax, 0
+  je code
+  mov [rsp+40],eax
+
+code:
+  mov eax,[rsp+40]
+  mov [rsp+40],eax
+  jmp return
+
+INJECT_MatchTime:
+  jmp newmem
+  nop 3
+return:
+registersymbol(INJECT_MatchTime)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT_MatchTime:
+  db 8B 44 24 40 89 44 24 40
+
+unregistersymbol(INJECT_MatchTime)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECT_MatchTimeION POINT: "PES2020.exe"+7ABD593
+
+"PES2020.exe"+7ABD571: 48 31 C1                       -  xor rcx,rax
+"PES2020.exe"+7ABD574: 41 0F B6 C1                    -  movzx eax,r9l
+"PES2020.exe"+7ABD578: 49 0F AF C8                    -  imul rcx,r8
+"PES2020.exe"+7ABD57C: 48 31 C1                       -  xor rcx,rax
+"PES2020.exe"+7ABD57F: 0F B6 C2                       -  movzx eax,dl
+"PES2020.exe"+7ABD582: 49 0F AF C8                    -  imul rcx,r8
+"PES2020.exe"+7ABD586: 48 31 C1                       -  xor rcx,rax
+"PES2020.exe"+7ABD589: 49 0F AF C8                    -  imul rcx,r8
+"PES2020.exe"+7ABD58D: 48 39 4B 10                    -  cmp [rbx+10],rcx
+"PES2020.exe"+7ABD591: 75 14                          -  jne PES2020.exe+7ABD5A7
+// ---------- INJECT_MatchTimeING HERE ----------
+"PES2020.exe"+7ABD593: 8B 44 24 40                    -  mov eax,[rsp+40]
+"PES2020.exe"+7ABD597: 89 44 24 40                    -  mov [rsp+40],eax
+// ---------- DONE INJECT_MatchTimeING  ----------
+"PES2020.exe"+7ABD59B: F3 0F 10 44 24 40              -  movss xmm0,[rsp+40]
+"PES2020.exe"+7ABD5A1: 48 83 C4 30                    -  add rsp,30
+"PES2020.exe"+7ABD5A5: 5B                             -  pop rbx
+"PES2020.exe"+7ABD5A6: C3                             -  ret
+"PES2020.exe"+7ABD5A7: 31 D2                          -  xor edx,edx
+"PES2020.exe"+7ABD5A9: 31 C9                          -  xor ecx,ecx
+"PES2020.exe"+7ABD5AB: E8 04 79 AB F9                 -  call PES2020.exe+1574EB4
+"PES2020.exe"+7ABD5B0: CC                             -  int 3
+"PES2020.exe"+7ABD5B1: CC                             -  int 3
+"PES2020.exe"+7ABD5B2: 41 BB FF FF FF FF              -  mov r11d,FFFFFFFF
+}
+</AssemblerScript>
+              <CheatEntries>
+                <CheatEntry>
+                  <ID>604</ID>
+                  <Description>"End current half"</Description>
+                  <LastState/>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+getAddressList().getMemoryRecordByDescription("TIME").Value=166500
+sleep(1500)
+getAddressList().getMemoryRecordByDescription("TIME").Value=0
+{$asm}
+[DISABLE]
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>605</ID>
+                  <Description>"Reset timer"</Description>
+                  <LastState/>
+                  <VariableType>Auto Assembler Script</VariableType>
+                  <AssemblerScript>[ENABLE]
+{$lua}
+getAddressList().getMemoryRecordByDescription("TIME").Value=1
+sleep(1500)
+getAddressList().getMemoryRecordByDescription("TIME").Value=0
+{$asm}
+[DISABLE]
+</AssemblerScript>
+                </CheatEntry>
+                <CheatEntry>
+                  <ID>4</ID>
+                  <Description>"TIME"</Description>
+                  <VariableType>Float</VariableType>
+                  <Address>MatchTime</Address>
+                </CheatEntry>
+              </CheatEntries>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>662</ID>
+              <Description>"Unlimited Stamina"</Description>
+              <LastState/>
+              <VariableType>Auto Assembler Script</VariableType>
+              <AssemblerScript>{ Game   : PES2020.exe
+  Version:
+  Date   : 2019-12-10
+  Author : Aranaktu
+
+  This script does blah blah blah
+}
+
+[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+
+
+
+aobscanmodule(INJECT_UnlimitedStamina,PES2020.exe,F7 7D 18 48 83 C4 30) // should be unique
+alloc(newmem,$1000,"PES2020.exe"+7F2B341)
+
+label(code)
+label(return)
+
+newmem:
+
+code:
+  idiv [rbp+18]
+  mov al, 64
+  add rsp,30
+  jmp return
+
+INJECT_UnlimitedStamina:
+  jmp newmem
+  nop 2
+return:
+registersymbol(INJECT_UnlimitedStamina)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+INJECT_UnlimitedStamina:
+  db F7 7D 18 48 83 C4 30
+
+unregistersymbol(INJECT_UnlimitedStamina)
+dealloc(newmem)
+
+{
+// ORIGINAL CODE - INJECT_UnlimitedStaminaION POINT: "PES2020.exe"+7F2B341
+
+"PES2020.exe"+7F2B31B: 0F B6 C2              -  movzx eax,dl
+"PES2020.exe"+7F2B31E: 49 0F AF CB           -  imul rcx,r11
+"PES2020.exe"+7F2B322: 48 31 C1              -  xor rcx,rax
+"PES2020.exe"+7F2B325: 49 0F AF CB           -  imul rcx,r11
+"PES2020.exe"+7F2B329: 48 39 8B E8 00 00 00  -  cmp [rbx+000000E8],rcx
+"PES2020.exe"+7F2B330: 75 2C                 -  jne PES2020.exe+7F2B35E
+"PES2020.exe"+7F2B332: 6B 45 10 64           -  imul eax,[rbp+10],64
+"PES2020.exe"+7F2B336: 48 8B 5C 24 50        -  mov rbx,[rsp+50]
+"PES2020.exe"+7F2B33B: 48 8B 7C 24 58        -  mov rdi,[rsp+58]
+"PES2020.exe"+7F2B340: 99                    -  cdq
+// ---------- INJECT_UnlimitedStaminaING HERE ----------
+"PES2020.exe"+7F2B341: F7 7D 18              -  idiv [rbp+18]
+"PES2020.exe"+7F2B344: 48 83 C4 30           -  add rsp,30
+// ---------- DONE INJECT_UnlimitedStaminaING  ----------
+"PES2020.exe"+7F2B348: 5D                    -  pop rbp
+"PES2020.exe"+7F2B349: C3                    -  ret
+"PES2020.exe"+7F2B34A: 31 D2                 -  xor edx,edx
+"PES2020.exe"+7F2B34C: 31 C9                 -  xor ecx,ecx
+"PES2020.exe"+7F2B34E: E8 61 9B 64 F9        -  call PES2020.exe+1574EB4
+"PES2020.exe"+7F2B353: CC                    -  int 3
+"PES2020.exe"+7F2B354: 31 D2                 -  xor edx,edx
+"PES2020.exe"+7F2B356: 31 C9                 -  xor ecx,ecx
+"PES2020.exe"+7F2B358: E8 57 9B 64 F9        -  call PES2020.exe+1574EB4
+"PES2020.exe"+7F2B35D: CC                    -  int 3
+}
+</AssemblerScript>
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>

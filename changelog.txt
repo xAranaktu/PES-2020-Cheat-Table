@@ -4,3 +4,12 @@ v20.1.1.1:
         - Blinking Form Arrow
         - Transfer Budget
         - Salary Budget
+        
+v20.1.1.2:
+    - Pointer for player is now also updating on Game Plan screen
+    - Added "Training":
+        - Focus Points
+    - Added to Gameplay:
+        - Match Time
+        - Unlimited Stamina
+
