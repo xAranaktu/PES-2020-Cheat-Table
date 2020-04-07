@@ -39,5 +39,3 @@
  - Gameplay:
     - Match Time
     - Unlimited Stamina
-# Discord
-https://discord.gg/rtMGhan
